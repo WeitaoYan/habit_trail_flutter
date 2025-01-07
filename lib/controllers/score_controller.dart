@@ -3,11 +3,14 @@ import 'package:habit_trail_flutter/controllers/student_controller.dart';
 
 import 'package:habit_trail_flutter/types/score.dart';
 import 'package:habit_trail_flutter/types/student_activity.dart';
+import 'package:habit_trail_flutter/types/response.dart';
 
 import '../utils/http.dart';
 
 class ScoreController extends GetxController {
   StudentController studentController = Get.find();
+  int nextPage = 1;
+  late int totalCount;
   late Rx<Score> score = Score(total: 0).obs;
   late RxList<StudentActivity> studentActivityList = <StudentActivity>[].obs;
 
@@ -22,15 +25,27 @@ class ScoreController extends GetxController {
   }
 
   Future fetchDetails() async {
+    if (totalCount == studentActivityList.length) {
+      return;
+    }
     HttpClient client = HttpClient();
-    String url = 'studentActivities/?student=${studentController.currentId}';
+    int student = studentController.currentId.value;
+    int page = nextPage;
+    String url = 'studentActivities/?student=$student&page=$page';
     final response = await client.get(url);
     if (response == null) {
       return;
     }
-    List<StudentActivity> dataList = StudentActivity.fromJsonList(response);
-    studentActivityList.clear();
-    studentActivityList.addAll(dataList);
+    PaginationResponse<StudentActivity> responses =
+        PaginationResponse.fromResponseJson(
+      response,
+      (json) => StudentActivity.fromJson(json),
+    );
+    totalCount = responses.count;
+    for (var element in responses.results) {
+      studentActivityList.add(element);
+    }
+    nextPage++;
   }
 
   Future fetchAll() async {

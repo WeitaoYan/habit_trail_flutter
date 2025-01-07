@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:habit_trail_flutter/types/student_activity.dart';
-
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../controllers/score_controller.dart';
 
 class ScorePage extends StatelessWidget {
@@ -13,7 +13,15 @@ class ScorePage extends StatelessWidget {
     return Center(
       child: Column(
         children: [
-          Obx(() => Text("总积分：${scoreController.score.value.total}")),
+          Obx(
+            () => Text(
+              "总积分：${scoreController.score.value.total}",
+              style: const TextStyle(
+                fontSize: 28,
+                color: Colors.lightBlue,
+              ),
+            ),
+          ),
           Expanded(
             child: Obx(() {
               if (scoreController.studentActivityList.isEmpty) {
@@ -24,11 +32,11 @@ class ScorePage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     StudentActivity activity =
                         scoreController.studentActivityList[index];
-                    return ListTile(
-                      dense: true,
-                      title: Text(activity.activity),
-                      subtitle: Text(activity.time),
-                      trailing: Text('Score: ${activity.score}'),
+                    return TDCell(
+                      arrow: false,
+                      title: activity.activity,
+                      description: activity.time,
+                      note: activity.score.toString(),
                     );
                   },
                 );

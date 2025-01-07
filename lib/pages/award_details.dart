@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:habit_trail_flutter/controllers/activity_controller.dart';
 import 'package:habit_trail_flutter/types/activity.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 class AwardDetails extends StatelessWidget {
   AwardDetails({super.key});
@@ -16,8 +17,12 @@ class AwardDetails extends StatelessWidget {
     scoreController.text = activity.score.toString();
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Task Details'),
+      appBar: const TDNavBar(
+        height: 48,
+        titleFontWeight: FontWeight.w600,
+        title: "奖励兑换",
+        screenAdaptation: false,
+        useDefaultBack: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

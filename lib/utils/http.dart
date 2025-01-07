@@ -5,13 +5,14 @@ import 'dart:convert';
 import 'package:habit_trail_flutter/controllers/token_controller.dart';
 
 class HttpClient {
-  final String baseUrl = "https://yanweitao.pythonanywhere.com/api/";
+  // final String baseUrl = "https://yanweitao.pythonanywhere.com/api/";
+  final String baseUrl = "http://127.0.0.1:3000/api/";
 
   HttpClient();
 
   String _getToken() {
     TokenController tokenController = Get.find();
-    return tokenController.accessToken.value;
+    return tokenController.getAccess();
   }
 
   Future<dynamic> get(String endpoint, {bool showSnackbar = true}) async {

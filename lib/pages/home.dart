@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:habit_trail_flutter/pages/awards.dart';
 import 'package:habit_trail_flutter/pages/profile.dart';
 import 'package:habit_trail_flutter/pages/score.dart';
@@ -26,10 +27,6 @@ class _HomeState extends State<Home> {
   }
 
   void onTabTapped(int index) async {
-    // if (index == 2) {
-    //   ScoreController scoreController = Get.find();
-    //   await scoreController.fetchAll();
-    // }
     setState(() {
       _currentIndex = index;
     });
@@ -38,8 +35,12 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("好习惯"),
+      appBar: const TDNavBar(
+        height: 48,
+        titleFontWeight: FontWeight.w600,
+        title: "首页",
+        screenAdaptation: false,
+        useDefaultBack: true,
       ),
       body: IndexedStack(
         index: _currentIndex,

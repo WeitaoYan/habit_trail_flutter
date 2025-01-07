@@ -1,81 +1,100 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:habit_trail_flutter/utils/http.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
-import '../utils/http.dart';
-
 class TokenController extends GetxController {
-  late Rx<String> accessToken = "".obs;
-  late Rx<String> refreshToken = "".obs;
+  final _access = ''.obs;
+  final _refresh = ''.obs;
+  final httpClient = HttpClient();
 
-  Future login(username, password) async {
-    HttpClient client = HttpClient();
-    final response = await client.postWithoutToken('token/', {
-      'username': username,
-      'password': password,
-    });
-    processToken(response, "登录");
+  String getAccess() {
+    return _access.value;
   }
 
-  void processToken(dynamic response, String type) {
-    if (kDebugMode) {
-      print("processToken");
-      print(response);
-    }
-    if (response != null && response['access'] != null) {
-      accessToken.value = response['access'];
-      refreshToken.value = response['refresh'];
-      Get.offNamed('/home');
-    } else {
-      Get.snackbar('错误', '$type失败');
+  saveTokens(String access, String refresh) async {
+    _access.value = access;
+    _refresh.value = refresh;
+  }
+
+  Future<void> login(String username, String password) async {
+    try {
+      final response = await httpClient.postWithoutToken('token/', {
+        'username': username,
+        'password': password,
+      });
+
+      if (response != null) {
+        saveTokens(response['access'], response['refresh']);
+        Get.offAllNamed('/home');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Login failed: $e');
+      }
     }
   }
 
-  Future<bool> hasValidToken() async {
-    if (accessToken.value != "" && refreshToken.value != "") {
-      Map<String, dynamic> decodedAccessToken =
-          JwtDecoder.decode(accessToken.value);
+  Future<bool> validateToken() async {
+    if (_access.value.isEmpty) return false;
+
+    try {
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(_access.value);
       var now = DateTime.now().millisecondsSinceEpoch;
-      return (decodedAccessToken['exp'] * 1000 < now);
+
+      // If token expires in 5 minutes, refresh it
+      if (decodedToken['exp'] * 1000 - now < 300000) {
+        return await refreshTokens();
+      }
+      return true;
+    } catch (e) {
+      return await refreshTokens();
     }
-    Get.offAllNamed('/login');
+  }
+
+  Future<bool> refreshTokens() async {
+    if (_refresh.value.isEmpty) {
+      logout();
+      return false;
+    }
+
+    try {
+      final response = await httpClient
+          .postWithoutToken('token/refresh/', {'refresh': _refresh.value});
+
+      if (response.statusCode == 200) {
+        saveTokens(response.data['access'], response.data['refresh']);
+        return true;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Token refresh failed: $e');
+      }
+    }
+
+    logout();
     return false;
   }
 
-  Future<void> doRefreshToken() async {
-    if (refreshToken.value != "") {
-      Map<String, dynamic> decodedRefreshToken =
-          JwtDecoder.decode(refreshToken.value);
-      var now = DateTime.now().millisecondsSinceEpoch;
-      if (decodedRefreshToken['exp'] * 1000 > now) {
-        HttpClient httpClient = HttpClient();
-        final response = await httpClient.postWithoutToken('token/refresh/', {
-          'refresh': refreshToken,
-        });
-        if (kDebugMode) {
-          print("refreshToken");
-          print(response);
-        }
-      }
-    }
+  void logout() {
+    _access.value = '';
+    _refresh.value = '';
     Get.offAllNamed('/login');
   }
 
-  Future register(username, email, password) async {
-    HttpClient client = HttpClient();
-    final response = await client.postWithoutToken('register/', {
+  String getToken() {
+    return _access.value;
+  }
+
+  bool isLoggedIn() {
+    return _access.value.isNotEmpty;
+  }
+
+  register(String username, String email, String password) {
+    httpClient.postWithoutToken('register/', {
       'username': username,
       'email': email,
       'password': password,
     });
-    processToken(response, "注册");
-  }
-
-  Future loginWithToken() async {
-    HttpClient client = HttpClient();
-    final response = await client.postWithoutToken('token/refresh/', {
-      'refresh': refreshToken,
-    });
-    processToken(response, "刷新登录");
   }
 }

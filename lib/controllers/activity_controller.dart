@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:habit_trail_flutter/controllers/student_controller.dart';
 import 'package:habit_trail_flutter/controllers/score_controller.dart';
 import 'package:habit_trail_flutter/types/activity.dart';
+// import 'package:habit_trail_flutter/types/response.dart';
 import 'package:habit_trail_flutter/types/student_activity.dart';
 import '../utils/http.dart';
 
@@ -28,6 +29,10 @@ class ActivityController extends GetxController {
       }
       return;
     }
+    // IResponse<Activity> responses = IResponse.fromResponseJson(
+    //   response,
+    //   (json) => Activity.fromJson(json),
+    // );
     List<Activity> activityList = Activity.fromJsonList(response);
     for (Activity item in activityList) {
       if (item.score > 0) {
@@ -38,6 +43,7 @@ class ActivityController extends GetxController {
     }
   }
 
+  // 创建活动
   Future createActivity(String name, int score, String content) async {
     HttpClient client = HttpClient();
     final response = await client.post('activities/', {
@@ -53,6 +59,7 @@ class ActivityController extends GetxController {
     }
   }
 
+  // 创建学生活动
   Future createStudentActivity(
       int activityId, int score, String comment) async {
     HttpClient client = HttpClient();

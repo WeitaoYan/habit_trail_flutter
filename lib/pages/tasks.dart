@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 import 'package:habit_trail_flutter/controllers/activity_controller.dart';
 import 'package:habit_trail_flutter/types/activity.dart';
 
@@ -11,30 +12,21 @@ class TasksPage extends StatelessWidget {
     final ActivityController activityController = Get.find();
     RxList<Activity> taskList = activityController.taskList;
     return Obx(
-      () => Center(
-        child: ListView.separated(
-          itemCount: taskList.length,
-          itemBuilder: (context, index) {
-            final activity = taskList[index];
-            return ListTile(
-              leading: const Icon(Icons.task),
-              title: Text(activity.name),
-              subtitle: Text(
-                activity.content,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              onTap: () => {
-                Get.toNamed(
-                  '/taskDetails',
-                  arguments: activity.id,
-                )
-              },
-              // trailing: const Icon(Icons.more_horiz),
-            );
-          },
-          separatorBuilder: (context, index) => const Divider(),
-        ),
+      () => TDCellGroup(
+        cells: taskList.map((activity) {
+          return TDCell(
+            imageWidget: const Icon(TDIcons.calendar_1),
+            title: activity.name,
+            arrow: true,
+            description: activity.content,
+            onClick: (cell) {
+              Get.toNamed(
+                '/taskDetails',
+                arguments: activity.id,
+              );
+            },
+          );
+        }).toList(),
       ),
     );
   }

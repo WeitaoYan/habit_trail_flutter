@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:habit_trail_flutter/controllers/token_controller.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 class RegisterPage extends StatelessWidget {
   final TextEditingController usernameController = TextEditingController();
@@ -15,102 +16,85 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Register'),
+      appBar: const TDNavBar(
+        height: 48,
+        titleFontWeight: FontWeight.w600,
+        title: "注册",
+        screenAdaptation: false,
+        useDefaultBack: false,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.fromLTRB(16.0, 40.0, 16.0, 0),
         child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextFormField(
+              TDInput(
+                type: TDInputType.normal,
                 controller: usernameController,
-                decoration: const InputDecoration(
-                  labelText: '用户名',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.text,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '用户名不能为空';
-                  }
-                  return null;
-                },
+                leftLabel: '用户名',
+                hintText: '请输入用户名',
+                backgroundColor: Colors.white,
+                needClear: true,
               ),
               const SizedBox(height: 16),
-              TextFormField(
+              TDInput(
+                type: TDInputType.normal,
                 controller: emailController,
-                decoration: const InputDecoration(
-                  labelText: '邮箱',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '邮箱不能为空';
-                  }
-                  if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                    return '请检查邮箱是否有效';
-                  }
-                  return null;
-                },
+                leftLabel: '邮箱',
+                hintText: '请输入邮箱地址',
+                backgroundColor: Colors.white,
+                needClear: true,
               ),
               const SizedBox(height: 16),
-              TextFormField(
+              TDInput(
+                type: TDInputType.normal,
                 controller: passwordController,
-                decoration: const InputDecoration(
-                  labelText: '密码',
-                  border: OutlineInputBorder(),
-                ),
                 obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '请输入密码';
-                  }
-                  return null;
-                },
+                leftLabel: '密码',
+                hintText: '请输入密码',
+                backgroundColor: Colors.white,
+                needClear: true,
               ),
               const SizedBox(height: 16),
-              TextFormField(
+              TDInput(
+                type: TDInputType.normal,
                 controller: confirmPasswordController,
-                decoration: const InputDecoration(
-                  labelText: '确认密码',
-                  border: OutlineInputBorder(),
-                ),
                 obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '请输入确认密码';
-                  }
-                  if (value != passwordController.text) {
-                    return '两次密码不一致';
-                  }
-                  return null;
-                },
+                leftLabel: '密码',
+                hintText: '请再次输入密码',
+                backgroundColor: Colors.white,
+                needClear: true,
               ),
+              const SizedBox(height: 16),
               const SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      final username = usernameController.text;
-                      final email = emailController.text;
-                      final password = passwordController.text;
-                      await register(username, email, password);
-                    }
+                child: TDButton(
+                  theme: TDButtonTheme.primary,
+                  isBlock: true,
+                  shape: TDButtonShape.rectangle,
+                  onTap: () async {
+                    await register(context);
                   },
-                  child: const Text('注册'),
+                  child: const Text(
+                    '注册',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
-              TextButton(
-                onPressed: () {
-                  Get.toNamed('/login');
-                },
-                child: const Text('已经有账号？点击登录'),
+              Align(
+                alignment: Alignment.center,
+                child: TDLink(
+                  state: TDLinkState.active,
+                  linkClick: (link) {
+                    Get.toNamed('/login');
+                  },
+                  label: '已经有账号？点击登录',
+                ),
               ),
             ],
           ),
@@ -119,7 +103,34 @@ class RegisterPage extends StatelessWidget {
     );
   }
 
-  Future<void> register(String username, String email, String password) async {
+  Future<void> register(context) async {
+    final username = usernameController.text;
+    final email = emailController.text;
+    final password = passwordController.text;
+    final confirmPassword = confirmPasswordController.text;
+    if (username.isEmpty ||
+        email.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty) {
+      TDToast.showFail("请填写完整信息", context: context);
+      return;
+    }
+    if (password != confirmPassword) {
+      TDToast.showFail("两次密码不一致", context: context);
+      return;
+    }
+    if (username.length < 6 || username.length > 16) {
+      TDToast.showFail("用户名长度为6-16位", context: context);
+    }
+    if (password.length < 6 || password.length > 16) {
+      TDToast.showFail("密码长度为6-16位", context: context);
+    }
+    // 密码验证，必须包含数字和字母
+    if (!RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{6,16}$')
+        .hasMatch(password)) {
+      TDToast.showFail("密码必须包含数字和字母", context: context);
+      return;
+    }
     TokenController tokenController = Get.find<TokenController>();
     tokenController.register(username, email, password);
   }
