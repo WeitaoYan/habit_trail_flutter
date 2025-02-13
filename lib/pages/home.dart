@@ -55,7 +55,7 @@ class _HomeState extends State<Home> {
         type: BottomNavigationBarType.fixed, // 设置底部导航栏类型
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.task), label: "任务"),
-          BottomNavigationBarItem(icon: Icon(Icons.store), label: "兑换"),
+          BottomNavigationBarItem(icon: Icon(Icons.store), label: "奖惩"),
           BottomNavigationBarItem(icon: Icon(Icons.loyalty), label: "积分"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "我的"),
         ],

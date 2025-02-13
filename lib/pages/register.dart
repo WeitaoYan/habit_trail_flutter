@@ -33,7 +33,10 @@ class RegisterPage extends StatelessWidget {
               TDInput(
                 type: TDInputType.normal,
                 controller: usernameController,
-                leftLabel: '用户名',
+                leftIcon: const Icon(
+                  Icons.person_add,
+                  color: Colors.black54,
+                ),
                 hintText: '请输入用户名',
                 backgroundColor: Colors.white,
                 needClear: true,
@@ -42,7 +45,10 @@ class RegisterPage extends StatelessWidget {
               TDInput(
                 type: TDInputType.normal,
                 controller: emailController,
-                leftLabel: '邮箱',
+                leftIcon: const Icon(
+                  Icons.email,
+                  color: Colors.black54,
+                ),
                 hintText: '请输入邮箱地址',
                 backgroundColor: Colors.white,
                 needClear: true,
@@ -52,7 +58,10 @@ class RegisterPage extends StatelessWidget {
                 type: TDInputType.normal,
                 controller: passwordController,
                 obscureText: true,
-                leftLabel: '密码',
+                leftIcon: const Icon(
+                  Icons.lock,
+                  color: Colors.black54,
+                ),
                 hintText: '请输入密码',
                 backgroundColor: Colors.white,
                 needClear: true,
@@ -62,7 +71,10 @@ class RegisterPage extends StatelessWidget {
                 type: TDInputType.normal,
                 controller: confirmPasswordController,
                 obscureText: true,
-                leftLabel: '密码',
+                leftIcon: const Icon(
+                  Icons.lock,
+                  color: Colors.black54,
+                ),
                 hintText: '请再次输入密码',
                 backgroundColor: Colors.white,
                 needClear: true,

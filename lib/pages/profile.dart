@@ -45,16 +45,22 @@ class ProfilePage extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.switch_account),
           title: const Text("切换学生"),
-          onTap: switchStudentHandler,
+          onTap: () {
+            switchStudentHandler(context);
+          },
         ),
       ],
     );
   }
 
-  void switchStudentHandler() async {
+  void switchStudentHandler(context) async {
     StudentController studentController = Get.find();
-    await studentController.fetchStudentList();
-    // 用picker让user选择哪个学生
+    TDPicker.showMultiPicker(context, title: '切换学生', onConfirm: (selected) {
+      studentController.currentId.value = selected[0];
+      Navigator.of(context).pop();
+    }, data: [
+      studentController.studentList.map((e) => e.name).toList(),
+    ]);
   }
 
   void createTaskHandler() {

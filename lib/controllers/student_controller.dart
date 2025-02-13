@@ -6,12 +6,12 @@ class StudentController extends GetxController {
   late Rx<int> currentId = 0.obs;
   late RxList<Student> studentList = <Student>[].obs;
 
-  @override
-  void onInit() async {
-    super.onInit();
-    await fetchStudentList();
-    await _loadCurrentId();
-  }
+  // @override
+  // void onInit() async {
+  //   super.onInit();
+  //   await fetchStudentList();
+  //   await _loadCurrentId();
+  // }
 
   Future fetchStudentList() async {
     HttpClient client = HttpClient();
@@ -22,6 +22,7 @@ class StudentController extends GetxController {
     List<Student> studentList = Student.fromJsonList(response);
     this.studentList.clear();
     this.studentList.addAll(studentList);
+    currentId.value = studentList.first.id;
   }
 
   Future createStudent(String name) async {
@@ -29,11 +30,5 @@ class StudentController extends GetxController {
     final response = await client.post('students/', {"name": name});
     Student student = Student.fromJson(response);
     studentList.add(student);
-  }
-
-  Future<void> _loadCurrentId() async {
-    if (studentList.isNotEmpty) {
-      currentId.value = studentList.first.id;
-    }
   }
 }

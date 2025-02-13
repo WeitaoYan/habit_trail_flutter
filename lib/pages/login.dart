@@ -36,7 +36,10 @@ class _LoginPageState extends State<LoginPage> {
             TDInput(
               type: TDInputType.normal,
               controller: usernameController,
-              leftLabel: '用户名',
+              leftIcon: const Icon(
+                Icons.person_2,
+                color: Colors.black54,
+              ),
               hintText: '请输入用户名',
               backgroundColor: Colors.white,
               needClear: true,
@@ -46,7 +49,10 @@ class _LoginPageState extends State<LoginPage> {
               type: TDInputType.normal,
               controller: passwordController,
               obscureText: !browseOn,
-              leftLabel: '密码',
+              leftIcon: const Icon(
+                Icons.lock,
+                color: Colors.black54,
+              ),
               hintText: '请输入密码',
               backgroundColor: Colors.white,
               rightBtn: browseOn
@@ -105,10 +111,10 @@ class _LoginPageState extends State<LoginPage> {
     TokenController tokenController = Get.find<TokenController>();
     await tokenController.login(username, password);
     StudentController studentController = Get.find<StudentController>();
+    await studentController.fetchStudentList();
     ActivityController activityController = Get.find<ActivityController>();
     ScoreController scoreController = Get.find<ScoreController>();
     await Future.wait([
-      studentController.fetchStudentList(),
       activityController.fetchActivityList(),
       scoreController.fetchAll(),
     ]);
