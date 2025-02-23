@@ -48,7 +48,7 @@ class ScoreController extends GetxController {
     nextPage++;
   }
 
-  Future fetchAll() async {
+  Future fetchInitScore() async {
     await fetchScore();
     await fetchDetails();
   }

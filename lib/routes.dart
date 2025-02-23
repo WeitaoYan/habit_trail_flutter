@@ -13,6 +13,6 @@ var routes = [
   GetPage(name: '/createAward', page: () => const CreateAward()),
   GetPage(name: '/awardDetails', page: () => AwardDetails()),
   GetPage(name: '/taskDetails', page: () => TaskDetails()),
-  GetPage(name: '/login', page: () => LoginPage()),
+  GetPage(name: '/login', page: () => const LoginPage()),
   GetPage(name: '/register', page: () => RegisterPage()),
 ];

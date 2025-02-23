@@ -20,6 +20,7 @@ class ActivityController extends GetxController {
     return awardList.firstWhere((element) => element.id == id);
   }
 
+  ///获取所有活动，正分数为任务，负分数为奖惩
   Future fetchActivityList() async {
     HttpClient client = HttpClient();
     final response = await client.get('activities/');
@@ -29,10 +30,6 @@ class ActivityController extends GetxController {
       }
       return;
     }
-    // IResponse<Activity> responses = IResponse.fromResponseJson(
-    //   response,
-    //   (json) => Activity.fromJson(json),
-    // );
     List<Activity> activityList = Activity.fromJsonList(response);
     for (Activity item in activityList) {
       if (item.score > 0) {

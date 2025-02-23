@@ -18,7 +18,9 @@ class AwardsPage extends StatelessWidget {
             imageWidget: const Icon(TDIcons.cardmembership),
             title: activity.name,
             arrow: true,
-            description: activity.content,
+            description: activity.content.length > 20
+                ? '${activity.content.substring(0, 20)}...'
+                : activity.content,
             onClick: (cell) {
               Get.toNamed(
                 '/awardDetails',

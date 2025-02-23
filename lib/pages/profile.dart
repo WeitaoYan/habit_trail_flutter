@@ -7,12 +7,13 @@ class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListTile(
-          leading: const Icon(Icons.person_add),
-          title: const Text("创建学生"),
-          onTap: () {
+    return TDCellGroup(
+      title: "我的",
+      cells: [
+        TDCell(
+          leftIcon: Icons.person_add,
+          title: "创建学生",
+          onClick: (TDCell cell) {
             showGeneralDialog(
               context: context,
               pageBuilder: (BuildContext buildContext,
@@ -25,27 +26,35 @@ class ProfilePage extends StatelessWidget {
                   title: "请输入学生姓名",
                   rightBtn: TDDialogButtonOptions(
                     title: "创建",
-                    action: () {},
+                    action: () {
+                      StudentController studentController = Get.find();
+                      studentController
+                          .createStudent(textEditingController.text);
+                    },
                   ),
                 );
               },
             );
           },
         ),
-        ListTile(
-          leading: const Icon(Icons.task),
-          title: const Text("创建任务"),
-          onTap: createTaskHandler,
+        TDCell(
+          leftIcon: Icons.task,
+          title: "创建任务",
+          onClick: (TDCell cell) {
+            Get.toNamed('/createTask');
+          },
         ),
-        ListTile(
-          leading: const Icon(Icons.auto_awesome_rounded),
-          title: const Text("创建奖品"),
-          onTap: createAwardTaskHandler,
+        TDCell(
+          leftIcon: Icons.auto_awesome_rounded,
+          title: "创建奖品",
+          onClick: (TDCell cell) {
+            Get.toNamed('/createAward');
+          },
         ),
-        ListTile(
-          leading: const Icon(Icons.switch_account),
-          title: const Text("切换学生"),
-          onTap: () {
+        TDCell(
+          leftIcon: Icons.switch_account,
+          title: "切换学生",
+          onClick: (TDCell cell) {
             switchStudentHandler(context);
           },
         ),
@@ -61,13 +70,5 @@ class ProfilePage extends StatelessWidget {
     }, data: [
       studentController.studentList.map((e) => e.name).toList(),
     ]);
-  }
-
-  void createTaskHandler() {
-    Get.toNamed('/createTask');
-  }
-
-  void createAwardTaskHandler() {
-    Get.toNamed('/createAward');
   }
 }

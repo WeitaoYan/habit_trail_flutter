@@ -10,10 +10,10 @@ class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  LoginPageState createState() => LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class LoginPageState extends State<LoginPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool browseOn = false;
@@ -116,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
     ScoreController scoreController = Get.find<ScoreController>();
     await Future.wait([
       activityController.fetchActivityList(),
-      scoreController.fetchAll(),
+      scoreController.fetchInitScore(),
     ]);
   }
 }

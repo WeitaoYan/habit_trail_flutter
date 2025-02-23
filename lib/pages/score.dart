@@ -17,8 +17,8 @@ class ScorePage extends StatelessWidget {
             () => Text(
               "总积分：${scoreController.score.value.total}",
               style: const TextStyle(
-                fontSize: 28,
-                color: Colors.lightBlue,
+                fontSize: 32,
+                color: Colors.blueAccent,
               ),
             ),
           ),

@@ -76,7 +76,7 @@ class CreateTask extends StatelessWidget {
                       axis: Axis.vertical,
                     ),
                   ),
-                  barrierColor: Colors.black.withOpacity(0.7),
+                  barrierColor: Colors.black.withAlpha(128),
                 );
                 ActivityController activityController = Get.find();
                 activityController.createActivity(
