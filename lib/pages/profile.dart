@@ -8,7 +8,6 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TDCellGroup(
-      title: "我的",
       cells: [
         TDCell(
           leftIcon: Icons.person_add,
@@ -30,6 +29,7 @@ class ProfilePage extends StatelessWidget {
                       StudentController studentController = Get.find();
                       studentController
                           .createStudent(textEditingController.text);
+                      Get.back();
                     },
                   ),
                 );
@@ -46,7 +46,7 @@ class ProfilePage extends StatelessWidget {
         ),
         TDCell(
           leftIcon: Icons.auto_awesome_rounded,
-          title: "创建奖品",
+          title: "创建奖励",
           onClick: (TDCell cell) {
             Get.toNamed('/createAward');
           },
@@ -69,6 +69,8 @@ class ProfilePage extends StatelessWidget {
       Navigator.of(context).pop();
     }, data: [
       studentController.studentList.map((e) => e.name).toList(),
+    ], initialIndexes: [
+      studentController.currentId.value
     ]);
   }
 }

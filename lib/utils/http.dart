@@ -6,7 +6,7 @@ import 'package:habit_trail_flutter/controllers/token_controller.dart';
 
 class HttpClient {
   final String baseUrl = "https://yanweitao.pythonanywhere.com/api/";
-  // final String baseUrl = "http://127.0.0.1:3000/api/";
+  // final String baseUrl = "http://192.168.1.199:8000/api/";
 
   HttpClient();
 

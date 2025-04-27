@@ -16,8 +16,9 @@ class ScorePage extends StatelessWidget {
           Obx(
             () => Text(
               "总积分：${scoreController.score.value.total}",
+              textAlign: TextAlign.left,
               style: const TextStyle(
-                fontSize: 32,
+                fontSize: 26,
                 color: Colors.blueAccent,
               ),
             ),
@@ -37,6 +38,20 @@ class ScorePage extends StatelessWidget {
                       title: activity.activity,
                       description: activity.time,
                       note: activity.score.toString(),
+                      onLongPress: (TDCell cell) {
+                        // 弹出确认对话框询问是否删除
+                        showGeneralDialog(
+                          context: context,
+                          pageBuilder: (BuildContext buildContext,
+                              Animation<double> animation,
+                              Animation<double> secondaryAnimation) {
+                            return TDConfirmDialog(
+                              title: "删除确认",
+                              action: () {},
+                            );
+                          },
+                        );
+                      },
                     );
                   },
                 );

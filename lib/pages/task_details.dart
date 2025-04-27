@@ -21,7 +21,7 @@ class TaskDetails extends StatelessWidget {
         height: 48,
         titleFontWeight: FontWeight.w600,
         title: "任务标记",
-        screenAdaptation: false,
+        screenAdaptation: true,
         useDefaultBack: true,
       ),
       body: Padding(
@@ -36,26 +36,28 @@ class TaskDetails extends StatelessWidget {
             const SizedBox(height: 16),
             Text('描述: ${activity.content}'),
             const SizedBox(height: 16),
-            TextField(
+            TDInput(
+              inputType: TextInputType.number,
+              leftLabel: '分数',
               controller: scoreController,
-              decoration: const InputDecoration(
-                labelText: 'Score',
-                border: OutlineInputBorder(),
+              hintText: '请输入分数',
+              rightBtn: Icon(
+                TDIcons.error_circle_filled,
+                color: TDTheme.of(context).fontGyColor3,
               ),
-              keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 16),
-            TextField(
+            TDInput(
+              leftLabel: '备注',
               controller: commentController,
-              decoration: const InputDecoration(
-                labelText: 'Comment',
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.text,
+              hintText: '备注些文字',
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () async {
+            TDButton(
+              text: '提交任务',
+              theme: TDButtonTheme.primary,
+              isBlock: true,
+              onTap: () async {
                 final score = int.tryParse(scoreController.text);
                 final comment = commentController.text;
                 if (score != null) {
@@ -63,23 +65,18 @@ class TaskDetails extends StatelessWidget {
                       id, score, comment);
                   Get.back();
                 } else {
-                  Get.snackbar('错误', '请输入正确的分数');
+                  showGeneralDialog(
+                    context: context,
+                    pageBuilder: (BuildContext buildContext,
+                        Animation<double> animation,
+                        Animation<double> secondaryAnimation) {
+                      return const TDConfirmDialog(
+                        title: "分数不能为空",
+                      );
+                    },
+                  );
                 }
               },
-              style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all(Colors.blueAccent),
-              ),
-              child: const SizedBox(
-                width: double.infinity,
-                child: Text(
-                  '标记完成',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
             ),
           ],
         ),

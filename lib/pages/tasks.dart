@@ -12,23 +12,30 @@ class TasksPage extends StatelessWidget {
     final ActivityController activityController = Get.find();
     RxList<Activity> taskList = activityController.taskList;
     return Obx(
-      () => TDCellGroup(
-        cells: taskList.map((activity) {
-          return TDCell(
-            imageWidget: const Icon(TDIcons.calendar_1),
-            title: activity.name,
-            arrow: true,
-            description: activity.content.length > 20
-                ? '${activity.content.substring(0, 20)}...'
-                : activity.content,
-            onClick: (cell) {
-              Get.toNamed(
-                '/taskDetails',
-                arguments: activity.id,
-              );
-            },
-          );
-        }).toList(),
+      () => SingleChildScrollView(
+        // 添加 SingleChildScrollView 使内容可滚动
+        child: TDCellGroup(
+          cells: taskList.map((activity) {
+            return TDCell(
+              imageWidget: const Icon(TDIcons.calendar_1),
+              title: activity.name,
+              arrow: true,
+              description: activity.content.length > 20
+                  ? '${activity.content.substring(0, 20)}...'
+                  : activity.content,
+              onClick: (cell) {
+                Get.toNamed(
+                  '/taskDetails',
+                  arguments: activity.id,
+                );
+              },
+              onLongPress: (TDCell cell) {
+                // 长按删除任务项
+                // activityController.removeTask(activity.id);
+              },
+            );
+          }).toList(),
+        ),
       ),
     );
   }

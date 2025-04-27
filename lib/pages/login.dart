@@ -4,6 +4,7 @@ import 'package:habit_trail_flutter/controllers/activity_controller.dart';
 import 'package:habit_trail_flutter/controllers/score_controller.dart';
 import 'package:habit_trail_flutter/controllers/student_controller.dart';
 import 'package:habit_trail_flutter/controllers/token_controller.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 class LoginPage extends StatefulWidget {
@@ -17,6 +18,48 @@ class LoginPageState extends State<LoginPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool browseOn = false;
+  bool rememberPassword = false; // 新增记住密码的状态变量
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedCredentials(); // 加载保存的凭证
+  }
+
+  // 加载保存的凭证
+  Future<void> _loadSavedCredentials() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? savedUsername = prefs.getString('username');
+    final String? savedPassword = prefs.getString('password');
+    final bool? savedRememberPassword = prefs.getBool('rememberPassword');
+
+    if (savedUsername != null &&
+        savedPassword != null &&
+        savedRememberPassword == true) {
+      usernameController.text = savedUsername;
+      passwordController.text = savedPassword;
+      rememberPassword = true;
+      setState(() {});
+    }
+  }
+
+  // 保存凭证
+  Future<void> _saveCredentials(
+    String username,
+    String password,
+    bool remember,
+  ) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (remember) {
+      await prefs.setString('username', username);
+      await prefs.setString('password', password);
+      await prefs.setBool('rememberPassword', true);
+    } else {
+      await prefs.remove('username');
+      await prefs.remove('password');
+      await prefs.remove('rememberPassword');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +68,7 @@ class LoginPageState extends State<LoginPage> {
         height: 48,
         titleFontWeight: FontWeight.w600,
         title: "登录",
-        screenAdaptation: false,
+        screenAdaptation: true,
         useDefaultBack: false,
       ),
       body: Padding(
@@ -72,6 +115,21 @@ class LoginPageState extends State<LoginPage> {
               needClear: true,
             ),
             const SizedBox(height: 16),
+            Row(
+              children: [
+                TDCheckbox(
+                  checked: rememberPassword,
+                  onCheckBoxChanged: (selected) {
+                    setState(() {
+                      rememberPassword = selected;
+                    });
+                  },
+                ),
+                const SizedBox(width: 8),
+                const Text('记住密码'),
+              ],
+            ),
+            const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
               child: TDButton(
@@ -81,6 +139,8 @@ class LoginPageState extends State<LoginPage> {
                 onTap: () async {
                   final username = usernameController.text;
                   final password = passwordController.text;
+                  await _saveCredentials(
+                      username, password, rememberPassword); // 保存凭证
                   await login(username, password);
                 },
                 child: const Text(

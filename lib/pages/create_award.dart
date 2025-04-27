@@ -20,7 +20,7 @@ class CreateAward extends StatelessWidget {
         height: 48,
         titleFontWeight: FontWeight.w600,
         title: "创建奖励",
-        screenAdaptation: false,
+        screenAdaptation: true,
         useDefaultBack: true,
       ),
       body: Padding(

@@ -25,9 +25,9 @@ class ScoreController extends GetxController {
   }
 
   Future fetchDetails() async {
-    if (totalCount == studentActivityList.length) {
-      return;
-    }
+    // if (totalCount == studentActivityList.length) {
+    //   return;
+    // }
     HttpClient client = HttpClient();
     int student = studentController.currentId.value;
     int page = nextPage;

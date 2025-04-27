@@ -20,7 +20,7 @@ class RegisterPage extends StatelessWidget {
         height: 48,
         titleFontWeight: FontWeight.w600,
         title: "注册",
-        screenAdaptation: false,
+        screenAdaptation: true,
         useDefaultBack: false,
       ),
       body: Padding(
@@ -137,10 +137,10 @@ class RegisterPage extends StatelessWidget {
     if (password.length < 6 || password.length > 16) {
       TDToast.showFail("密码长度为6-16位", context: context);
     }
-    // 密码验证，必须包含数字和字母
-    if (!RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{6,16}$')
+    // 密码验证，必须包含字母、数字和符号
+    if (!RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).{6,16}$')
         .hasMatch(password)) {
-      TDToast.showFail("密码必须包含数字和字母", context: context);
+      TDToast.showFail("密码必须包含字母、数字和符号", context: context);
       return;
     }
     TokenController tokenController = Get.find<TokenController>();

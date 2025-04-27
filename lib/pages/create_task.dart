@@ -20,7 +20,7 @@ class CreateTask extends StatelessWidget {
         height: 48,
         titleFontWeight: FontWeight.w600,
         title: "创建任务",
-        screenAdaptation: false,
+        screenAdaptation: true,
         useDefaultBack: true,
       ),
       body: Padding(

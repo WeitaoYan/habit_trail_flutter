@@ -12,23 +12,30 @@ class AwardsPage extends StatelessWidget {
     final ActivityController activityController = Get.find();
     List<Activity> awardList = activityController.awardList;
     return Obx(
-      () => TDCellGroup(
-        cells: awardList.map((activity) {
-          return TDCell(
-            imageWidget: const Icon(TDIcons.cardmembership),
-            title: activity.name,
-            arrow: true,
-            description: activity.content.length > 20
-                ? '${activity.content.substring(0, 20)}...'
-                : activity.content,
-            onClick: (cell) {
-              Get.toNamed(
-                '/awardDetails',
-                arguments: activity.id,
-              );
-            },
-          );
-        }).toList(),
+      () => SingleChildScrollView(
+        // 添加 SingleChildScrollView 使内容可滚动
+        child: TDCellGroup(
+          cells: awardList.map((activity) {
+            return TDCell(
+              imageWidget: const Icon(TDIcons.cardmembership),
+              title: activity.name,
+              arrow: true,
+              description: activity.content.length > 20
+                  ? '${activity.content.substring(0, 20)}...'
+                  : activity.content,
+              onClick: (cell) {
+                Get.toNamed(
+                  '/awardDetails',
+                  arguments: activity.id,
+                );
+              },
+              onLongPress: (TDCell cel) {
+                // 长按删除奖惩项
+                // activityController.removeAward(activity.id);
+              },
+            );
+          }).toList(),
+        ),
       ),
     );
   }

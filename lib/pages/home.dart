@@ -38,9 +38,8 @@ class _HomeState extends State<Home> {
       appBar: const TDNavBar(
         height: 48,
         titleFontWeight: FontWeight.w600,
-        title: "首页",
-        screenAdaptation: false,
-        useDefaultBack: true,
+        title: "好习惯",
+        useDefaultBack: false,
       ),
       body: IndexedStack(
         index: _currentIndex,
