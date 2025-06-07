@@ -36,7 +36,9 @@ class ScorePage extends StatelessWidget {
                     return TDCell(
                       arrow: false,
                       title: activity.activity,
-                      description: activity.time,
+                      description:
+                          '${activity.time.month.toString().padLeft(2, '0')}-${activity.time.day.toString().padLeft(2, '0')} '
+                          '${activity.time.hour.toString().padLeft(2, '0')}:${activity.time.minute.toString().padLeft(2, '0')}',
                       note: activity.score.toString(),
                       onLongPress: (TDCell cell) {
                         // 弹出确认对话框询问是否删除
@@ -46,7 +48,7 @@ class ScorePage extends StatelessWidget {
                               Animation<double> animation,
                               Animation<double> secondaryAnimation) {
                             return TDConfirmDialog(
-                              title: "删除确认",
+                              title: activity.comment,
                               action: () {},
                             );
                           },

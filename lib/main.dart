@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      initialRoute: '/login',
+      initialRoute: '/home',
       getPages: routes,
       initialBinding: BindingsBuilder(() {
         Get.put(TokenController(), permanent: true);

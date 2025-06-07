@@ -14,6 +14,15 @@ class ScoreController extends GetxController {
   late Rx<Score> score = Score(total: 0).obs;
   late RxList<StudentActivity> studentActivityList = <StudentActivity>[].obs;
 
+  ScoreController() {
+    studentActivityList.listen((_) {
+      studentActivityList.sort(
+        (a, b) => b.time.compareTo(a.time), // 假设 StudentActivity 有 time 字段
+      );
+    });
+  }
+
+  /// 从网络获取学生总分数
   Future fetchScore() async {
     HttpClient client = HttpClient();
     String url = 'students/${studentController.currentId}/totalScore/';
@@ -24,10 +33,8 @@ class ScoreController extends GetxController {
     score.value = Score.fromJson(response);
   }
 
+  /// 从网络获取积分列表
   Future fetchDetails() async {
-    // if (totalCount == studentActivityList.length) {
-    //   return;
-    // }
     HttpClient client = HttpClient();
     int student = studentController.currentId.value;
     int page = nextPage;

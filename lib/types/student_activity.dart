@@ -1,8 +1,6 @@
-// {"student":1,"activity":1,"comment":"","earned_score":10}
-
 class StudentActivity {
   final String activity;
-  final String time;
+  final DateTime time;
   final String comment;
   final int operator;
   final int score;
@@ -17,7 +15,7 @@ class StudentActivity {
 
   factory StudentActivity.fromJson(Map<String, dynamic> json) {
     return StudentActivity(
-      time: json['time'],
+      time: DateTime.fromMillisecondsSinceEpoch((json['time'] * 1000).toInt()),
       activity: json['activity'],
       comment: json['comment'],
       operator: json['operator'] as int,
